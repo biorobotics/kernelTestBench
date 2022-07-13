@@ -38,7 +38,7 @@ add_executable(kernelTestBench main.cpp ${kernel_src} ${kernel_header} ${kernel_
                             ${routines} ${util_src} ${util_header} ${util_header}  ${includes})
 
 set_target_properties(kernelTestBench PROPERTIES
-        CUDA_SEPARABLE_COMPILATION OFF)
+        CUDA_SEPARABLE_COMPILATION ON)
 
 
 target_link_libraries(kernelTestBench ${OpenCV_LIBS} CUDA::toolkit CUDA::nppim)

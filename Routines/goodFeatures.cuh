@@ -1,4 +1,5 @@
 #include "common.cuh"
+#include "minMax.cuh"
 
 float guassKernel[9] = {1.0/16, 2.0/16, 1.0/16, 2.0/16, 4.0/16, 2.0/16, 1.0/16, 2.0/16, 1.0/16};
 
@@ -23,7 +24,7 @@ void goodFeaturesToTrack(float* image, float* R, float* R_copy, float* dx, float
     getScores<<<blocks, threads>>>(dx, dy, R, num_cols);
     cudaDeviceSynchronize();
     cudaMemcpy(R_copy, R, num_rows * num_cols * sizeof(float), cudaMemcpyDeviceToDevice);
-    compute_reduction(R, image, num_rows * num_cols);
+    computeMinMax(R, image, num_rows * num_cols);
     cudaMemcpy(minMax , image, 2 * sizeof(float), cudaMemcpyDeviceToHost);
     printf("Max Val = %f\n", minMax[1]);
     filterScores<<<blocks, threads>>>(R_copy, lambda * minMax[1], num_cols);
