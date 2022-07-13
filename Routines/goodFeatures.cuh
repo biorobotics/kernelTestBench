@@ -1,12 +1,13 @@
 #include "common.cuh"
 
 float guassKernel[9] = {1.0/16, 2.0/16, 1.0/16, 2.0/16, 4.0/16, 2.0/16, 1.0/16, 2.0/16, 1.0/16};
-cudaMemcpyToSymbol(guassianKernel, &guassKernel[0], 9 * sizeof(float));
+
 
 
 void goodFeaturesToTrack(float* image, float* R, float* R_copy, float* dx, float* dy, float* mask, int num_rows, 
                          int num_cols, float lambda, std::vector<cv::Point2i>* points)
 {
+    cudaMemcpyToSymbol(guassianKernel, &guassKernel[0], 9 * sizeof(float));
 
     dim3 threads(BLOCK_SIZE, BLOCK_SIZE);
     dim3 blocks(num_rows / threads.y, num_cols / threads.x);

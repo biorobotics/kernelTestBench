@@ -36,7 +36,7 @@ void runShiTomasiTest()
     visualizeShiTomasiResult("grayscale.jpg");
 
 
-    printf("\t%s   \t%s   \t%s   \t%s  \t%s \n\n", "NxN Size", "GFLOPS", "BW", "BW Achieved TIME in us");
+    printf("\t%s   \t%s   \t%s   \t%s  \t%s \n\n", "NxN Size", "GFLOPS", "BW", "BW Achieved",  "TIME in us");
 
     benchmarkShiTomasi("grayscale.jpg", 640);
     benchmarkShiTomasi("grayscale.jpg", 1024);

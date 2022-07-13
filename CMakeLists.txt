@@ -34,11 +34,11 @@ set_source_files_properties(${routines} PROPERTIES LANGUAGE CUDA)
 set_source_files_properties(${util_src} PROPERTIES LANGUAGE CUDA)
 set_source_files_properties(${util_header_cuda} PROPERTIES LANGUAGE CUDA)
 
-add_executable(kernelTestBench main.cpp ${includes} ${kernel_src} ${kernel_header} ${kernel_camera_src} ${kernel_camera_header}
-                            ${routines} ${util_src} ${util_header} ${util_header})
+add_executable(kernelTestBench main.cpp ${kernel_src} ${kernel_header} ${kernel_camera_src} ${kernel_camera_header}
+                            ${routines} ${util_src} ${util_header} ${util_header}  ${includes})
 
 set_target_properties(kernelTestBench PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON)
+        CUDA_SEPARABLE_COMPILATION OFF)
 
 
 target_link_libraries(kernelTestBench ${OpenCV_LIBS} CUDA::toolkit CUDA::nppim)
