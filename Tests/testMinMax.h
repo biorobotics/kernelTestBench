@@ -1,3 +1,6 @@
+#ifndef TESTMINMAX_H
+#define TESTMINMAX_H
+
 #include "common.h"
 
 #define NUM_ITER 250
@@ -63,3 +66,5 @@ void runMinMaxTests(void)
     for(int i=i; i < 5; i++)
         testMinMax((size_t)(std::pow(base, i) + 13533 + i), 0);
 }
+
+#endif

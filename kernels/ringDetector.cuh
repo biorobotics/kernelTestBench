@@ -1,7 +1,11 @@
+#ifndef RINGDETECTOR_CUH
+#define RINGDETECTOR_CUH
+
 #include <cuda_profiler_api.h>
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 
+#include "util.cuh"
 
 #define TILE_SIZE 32
 #define SIZE 1024
@@ -15,3 +19,5 @@ __global__ void createHSVMask(uint8_t* h, uint8_t* s, uint8_t* v, int num_cols, 
 
 __global__ void _fisheye_bitwise_and(uint8_t* hsv_mask, uint8_t* fisheye_mask, int num_cols);
 
+__device__ inline float getMedian(float* array);
+#endif

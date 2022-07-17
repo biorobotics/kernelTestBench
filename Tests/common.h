@@ -1,3 +1,6 @@
+#ifndef COMMON_TEST_H
+#define COMMON_TEST_H
+
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -6,3 +9,5 @@
 
 #include "../Includes/routines.h"
 #include "../Includes/util.h"
+
+#endif

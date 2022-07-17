@@ -3,7 +3,6 @@
 #include "Includes/tests.h"
 #include "Utils/common.h"
 
-
 int main()
 {
     printAllDeviceInfo();

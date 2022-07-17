@@ -37,7 +37,7 @@ void  printDeviceInfo(int deviceId)
   
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop, deviceId);
-    printf("Device Number: %d\n", i);
+    printf("Device Number: %d\n", deviceId);
     printf("  Device name: %s\n", prop.name);
     printf("  Memory Clock Rate (MHz): %d\n",
            prop.memoryClockRate/1024);
@@ -58,19 +58,21 @@ void  printDeviceInfo(int deviceId)
 float getBusWidth(int deviceId)
 {
     cudaDeviceProp prop;
-    cudaGetDeviceProperties(&prop, i);
+    cudaGetDeviceProperties(&prop, deviceId);
     return prop.memoryBusWidth;
 }
 
 float getPeakBandWidth(int deviceId)
 {
     cudaDeviceProp prop;
-    cudaGetDeviceProperties(&prop, i);
+    cudaGetDeviceProperties(&prop, deviceId);
     return 2.0*prop.memoryClockRate*(prop.memoryBusWidth/8)/1.0e6;     
 }
 
 float getTotalMemory(int deviceId)
 {
     // In GB
-    return (float)(prop.totalGlobalMem)/1024.0/1024.0/1024.0
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, deviceId);
+    return (float)(prop.totalGlobalMem)/1024.0/1024.0/1024.0;
 }

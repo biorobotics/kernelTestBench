@@ -19,7 +19,7 @@ void findBlockSize(int* whichSize, int* num_el){
 
 }
 
-__device__ inline float getMedian(float* array)
+__device__  float getMedian(float* array)
 {
     float tmp;
     for(int i=0; i < 9; i++)

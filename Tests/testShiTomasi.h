@@ -1,3 +1,6 @@
+#ifndef TESTSHITOMASI_H
+#define TESTSHITOMASI_H
+
 #include "common.h"
 
 
@@ -45,3 +48,6 @@ void runShiTomasiTest()
     benchmarkShiTomasi("grayscale.jpg", 8192);
 
 }
+
+
+#endif

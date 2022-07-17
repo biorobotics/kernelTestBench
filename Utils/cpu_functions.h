@@ -1,3 +1,6 @@
+#ifndef CPUFUNCTIONS_H
+#define CPUFUNCTIONS_H
+
 #include "common.h"
 
 float cpu_min(float* in, int num_els)
@@ -33,3 +36,6 @@ unsigned long long int get_clock()
 	return (unsigned long long int)tv.tv_usec + 1000000*tv.tv_sec;
 
 }
+
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef REDUCTION_CUH
+#define REDUCTION_CUH
+
 #include <cuda.h>
 
 
@@ -29,3 +32,6 @@ __global__ void find_min_max_dynamic(float* in, float* out, int n, int start_adr
 
 template<int els_per_block, int threads>
 __global__ void find_min_max(float* in, float* out);
+
+
+#endif

@@ -1,3 +1,7 @@
+#ifndef UTIL_CUH
+#define UTIL_CUH
+
+
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 #include <device_launch_parameters.h>
@@ -23,5 +27,4 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
 
 void findBlockSize(int* whichSize, int* num_el);
 
-
-__device__ inline float getMedian(float* array);
+#endif

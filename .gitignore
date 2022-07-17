@@ -5,3 +5,6 @@ CMakeCache.txt
 Makefile
 CMakeFiles/
 build/
+*.log
+*.a
+*.so*

@@ -1,3 +1,6 @@
+#ifndef PINHOLE_CUH
+#define PINHOLE_CUH
+
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 
@@ -28,3 +31,4 @@ __global__ void liftProjective_noDistort_rejectWithF(cv::Point2f* cur_points, cv
                 double k1, double k2, double p1, double p2, size_t num_elements);
 
 
+#endif

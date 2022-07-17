@@ -1,6 +1,5 @@
 #include "gfft.cuh"
 
-
 __global__ void sobel(float* x, float* dx, float* dy, int num_cols)
 {
     __shared__ float smem[BLOCK_SIZE + 2][BLOCK_SIZE + 2];
@@ -111,9 +110,14 @@ __global__ void getScores(float* dx, float* dy, float* R, int num_cols)
 #pragma unroll
         for(int j=-1; j <= 1; j++)
         {
-            dxx += guassianKernel[(i+w_offset_row) * 3 + (j+w_offset_col)] * dx_smem[ty + i][tx + j] * dx_smem[ty + i][tx + j];
-            dyy += guassianKernel[(i+w_offset_row) * 3 + (j+w_offset_col)] * dy_smem[ty + i][tx + j] * dy_smem[ty + i][tx + j];
-            dxy += guassianKernel[(i+w_offset_row) * 3 + (j+w_offset_col)] * dx_smem[ty + i][tx + j] * dy_smem[ty + i][tx + j];
+            //dxx += guassianKernel[(i+w_offset_row) * 3 + (j+w_offset_col)] * dx_smem[ty + i][tx + j] * dx_smem[ty + i][tx + j];
+            //dyy += guassianKernel[(i+w_offset_row) * 3 + (j+w_offset_col)] * dy_smem[ty + i][tx + j] * dy_smem[ty + i][tx + j];
+            //dxy += guassianKernel[(i+w_offset_row) * 3 + (j+w_offset_col)] * dx_smem[ty + i][tx + j] * dy_smem[ty + i][tx + j];
+
+            dxx += dx_smem[ty + i][tx + j] * dx_smem[ty + i][tx + j];
+            dyy += dy_smem[ty + i][tx + j] * dy_smem[ty + i][tx + j];
+            dxy += dx_smem[ty + i][tx + j] * dy_smem[ty + i][tx + j];
+
         }
 
     float score = (dxx + dyy + sqrtf(((dxx - dyy) * (dxx - dyy)) + 4 * dxy * dxy)) / 2;

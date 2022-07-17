@@ -1,6 +1,24 @@
 #include "ringDetector.cuh"
-#include "util.cuh"
 
+__device__  float getMedian(float* array)
+{
+    float tmp;
+    for(int i=0; i < 9; i++)
+    {
+#pragma unroll
+        for(int j=0; j < 9; j++)
+        {  
+            if(array[i] > array[j])
+            {
+                tmp = array[i];
+                array[i] = array[j];
+                array[j] = tmp;
+            }
+        }
+    }
+
+    return tmp;
+}
 
 __global__ void rgb2HSV(uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* h, uint8_t* s, uint8_t* v, int num_rows, int num_cols)
 {
