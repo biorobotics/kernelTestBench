@@ -1,18 +1,30 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.15)
 
-project(kernelTestBench)
-
-enable_language(CUDA)
-enable_language(CXX)
+project(kernelTestBench CUDA CXX)
  
 set(CMAKE_CUDA_STANDARD 14)
 set(CMAKE_CXX_STANDARD 14)
+set(CUDA_ARCH "53") # setting default cuda architecture. Please make sure detected cuda architecture is correct
+
+set(PREFIX_PATH ${CMAKE_BINARY_DIR})
+set(SOURCE_FILE_PATH ${PREFIX_PATH}/detectCudaArch.cu)
+
+execute_process(COMMAND nvcc ${SOURCE_FILE_PATH} -o detectarch OUTPUT_VARIABLE CUDA_COMPILE)
+message(STATUS "Output Of Compilation = ${CUDA_COMPILE}")
+if(NOT ${CUDA_COMPILE} STREQUAL "")
+        message(FATAL_ERROR "error in compilation output, please check") 
+        EXIT()
+endif()
+
+execute_process(COMMAND ./detectarch OUTPUT_VARIABLE CUDA_ARCH)
+message(STATUS "Detected Cuda Architecture = ${CUDA_ARCH}")
 
 set(CMAKE_BUILD_TYPE Release)
 
 find_package(CUDAToolkit REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(CUDA REQUIRED)
+
+
 
 file(GLOB_RECURSE kernel_src CONFIGURE_DEPENDS kernels/*.cu)
 file(GLOB_RECURSE kernel_header CONFIGURE_DEPENDS kernels/*.cuh)
@@ -28,36 +40,12 @@ file(GLOB_RECURSE tests CONFIGURE_DEPENDS Tests/*.h)
 file(GLOB_RECURSE includes CONFIGURE_DEPENDS Includes/*.h)
 
 
-set_source_files_properties(${kernel_src} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${kernel_header} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${kernel_camera_src} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${kernel_camera_header} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${routines} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${routines_src} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${util_src} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${util_header_cuda} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${util_header} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${test} PROPERTIES LANGUAGE CUDA)
-set_source_files_properties(${includes} PROPERTIES LANGUAGE CUDA)
+add_executable(kernelTestBench main.cpp ${kernel_src} ${kernel_header} ${kernel_camera_src} ${kernel_camera_header} 
+                                        ${util_src}   ${util_header}   ${util_header_cuda}
+                                        ${routines} ${routines_src}
+                                        ${includes} ${test}
+)
 
-add_library(kernelLib SHARED ${kernel_src} ${kernel_header} ${kernel_camera_src} ${kernel_camera_header})
-add_library(utilLib SHARED   ${util_src}   ${util_header}   ${util_header_cuda})
-add_library(routineLib STATIC ${routines} ${routines_src})
-add_library(testLib SHARED ${includes} ${test}) 
+set_target_properties(kernelTestBench PROPERTIES CUDA_ARCHITECTURES ${CUDA_ARCH})
 
-add_dependencies(routineLib utilLib kernelLib ${OpenCV_LIBS} CUDA::toolkit CUDA::nppim)
-add_dependencies(testLib kernelLib utilLib routineLib ${OpenCV_LIBS} CUDA::toolkit CUDA::nppim)
-
-set_target_properties(kernelLib  PROPERTIES SOVERSION 1)
-set_target_properties(utilLib    PROPERTIES SOVERSION 1)
-set_target_properties(routineLib PROPERTIES SOVERSION 1)
-set_target_properties(testLib    PROPERTIES SOVERSION 1)
-
-target_link_libraries(routineLib kernelLib utilLib ) 
-target_link_libraries(testLib routineLib utilLib kernelLib)
-
-set_target_properties(kernelLib PROPERTIES
-        CUDA_SEPARABLE_COMPILATION OFF)
-
-add_executable(kernelTestBench main.cpp)
-target_link_libraries(kernelTestBench kernelLib utilLib routineLib testLib)
+target_link_libraries(kernelTestBench CUDA::cudart CUDA::toolkit CUDA::nppim)
